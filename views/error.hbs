@@ -1,0 +1,7 @@
+<h1>Server error</h1>
+{{#if debugEnabled}}
+    <h2>{{err.message}}</h2>
+    <pre>
+        {{err.stack}}
+    </pre>
+{{/if}}

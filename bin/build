@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+'use strict';
+
+const webpack = require('webpack');
+const webpackConfig = require('../webpack.config');
+const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+
+// add uglify
+const uglify = new UglifyJsPlugin({ minimize: true });
+webpackConfig.plugins.push(uglify);
+
+// add gzip
+const gzip = new CompressionPlugin({
+    asset: '{file}.gz',
+    algorithm: 'gzip',
+    regExp: /\.(js|css)$/,
+    threshold: 10, // 240,
+    minRatio: 0.8
+});
+webpackConfig.plugins.push(gzip);
+
+// returns a Compiler instance
+const compiler = webpack(webpackConfig);
+
+compiler.run((err, stats) => {
+    if (err) {
+        console.log('Build failed', err);
+    } else {
+        console.log('Build is done.', stats);
+    }
+});
