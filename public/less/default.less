@@ -1,3 +1,58 @@
+
+@import "~bootstrap/less/bootstrap.less";
+
 body {
-    color: #f00;
+    color: #555;
+    font-family: Arial, sans-serif;
+}
+
+@leftSize: 120px;
+@lighten: 25%;
+@darken: 15%;
+
+.graphContainer {
+    & { overflow-x: auto; position: relative; }
+    .days {
+        & { position: absolute; top: 0; left: @leftSize; bottom: 0; right: 0; white-space: nowrap; overflow-x: visible; z-index: -1;}
+        .day { width: 60px; height: 100%; position: relative; top: 0; bottom: 0; background: #fbfbfb; border-right: 1px solid #eee; display: inline-block; text-align: center; }
+    }
+    .project {
+        & { display: inline-block; width: 100%; }
+        .projectTitle {
+            & {  padding: 1px 10px; color: #fff; }
+            &.orange { background-color: darken(#ffab4a, @darken); }
+            &.red  { background-color: darken(#eb5a46, @darken); }
+            &.green { background-color:  darken(#61bd4f, @darken); }
+            &.yellow { background-color: darken(#f2d600, @darken); }
+            &.purple { background-color: darken(#c377e0, @darken); }
+            &.blue { background-color: darken(#0079bf, @darken); }
+            &.black, & { background-color: darken(black, 80%); }
+            &.sky { background-color: darken(#00c2e0, @darken); }
+            &.pink { background-color: darken(#ff80ce, @darken); }
+            &.lime { background-color: darken(#51e898, @darken); }
+        }
+        .lane {
+            & { clear: left; height: 30px; }
+            .label { float: left; width: @leftSize; overflow: hidden; padding: 7px 0; white-space: nowrap; color: #555; }
+            .row {
+                & { position: relative; margin-left: @leftSize; }
+                .task {
+                    & { position: absolute; top: 1px; height: 24px; padding: 5px 1px; background: #f2f2f2; border: 1px solid #999;  font-size: 0.7em; }
+                    &:hover { width: auto !important; }
+                    &.orange { background-color: lighten(#ffab4a, @lighten); }
+                    &.red  { background-color: lighten(#eb5a46, @lighten); }
+                    &.green { background-color:  lighten(#61bd4f, @lighten); }
+                    &.yellow { background-color: lighten(#f2d600, @lighten); }
+                    &.purple { background-color: lighten(#c377e0, @lighten); }
+                    &.blue { background-color: lighten(#0079bf, @lighten); }
+                    &.black { background-color: lighten(black, 80%); }
+                    &.sky { background-color: lighten(#00c2e0, @lighten); }
+                    &.pink { background-color: lighten(#ff80ce, @lighten); }
+                    &.lime { background-color: lighten(#51e898, @lighten); }
+                    .cardName { white-space: nowrap; overflow: hidden; }
+                    .progressShow { position: absolute; left: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.15); border-bottom: 1px solid #d00; }
+                }
+            }
+        }
+    }
 }

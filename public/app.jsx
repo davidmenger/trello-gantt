@@ -1,14 +1,31 @@
 'use strict';
 
 const React = require('react');
-const ReactDom = require('react-dom');
+const redux = require('redux');
+const reactRedux = require('react-redux');
+const ganttActions = require('./actions/ganttActions');
+const Table = require('./components/table.jsx');
 
 class App extends React.Component {
     render () {
-        return <h2>Hello world</h2>;
+        return (
+            <Table {...this.props} />
+        );
     }
 }
 
-ReactDom.render(<App />, document.getElementById('app'));
+function mapStateToProps (state) {
+    console.log('MAP', state.projects);
+    return state.projects;
+}
 
-module.exports = App;
+function mapDispatchToProps (dispatch) {
+    return {
+        actions: redux.bindActionCreators(ganttActions, dispatch)
+    };
+}
+
+module.exports = reactRedux.connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

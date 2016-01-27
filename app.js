@@ -46,7 +46,7 @@ if (config.debugEnabled) {
     const webpackConfig = require('./webpack.config');
 
     Object.assign(webpackConfig, {
-        devtool: 'eval-cheap-module-source-map'
+        devtool: 'eval-source-map'// 'eval-cheap-module-source-map'
     });
 
     app.use(koaWebpackDev({
