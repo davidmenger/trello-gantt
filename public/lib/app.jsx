@@ -3,20 +3,24 @@
 const React = require('react');
 const redux = require('redux');
 const reactRedux = require('react-redux');
-const ganttActions = require('./actions/ganttActions');
-const Table = require('./components/table.jsx');
+const ganttActions = require('../actions/ganttActions');
+const Table = require('../components/table.jsx');
+const Controls = require('../components/controls.jsx');
 
 class App extends React.Component {
+
     render () {
         return (
-            <Table {...this.props} />
+            <div>
+                <Controls {...this.props} />
+                <Table {...this.props} />
+            </div>
         );
     }
 }
 
 function mapStateToProps (state) {
-    console.log('MAP', state.projects);
-    return state.projects;
+    return state;
 }
 
 function mapDispatchToProps (dispatch) {

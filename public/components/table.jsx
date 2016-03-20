@@ -7,10 +7,13 @@ const DAY_MICROSECONDS = 86400000;
 
 class Table extends React.Component {
     render () {
+        if (this.props.loading) {
+            return (<div>loading...</div>);
+        }
+
         const projects = this.props.projects || [];
         let begin = this.props.start || new Date();
         let firstStyle = { width: (60 * ((23 - begin.getHours()) / 23)) + 'px' };
-        console.log('F', firstStyle);
         const end = this.props.end || begin;
         const days = [];
 
@@ -27,11 +30,11 @@ class Table extends React.Component {
                 <div className="days">
                     {days}
                 </div>
-                <br/>
+                <br />
                 {projects.map(project =>
                     <Project key={project.id} project={project} />
                 )}
-                <br/>
+                <br />
             </div>
         );
     }

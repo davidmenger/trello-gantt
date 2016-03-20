@@ -1,23 +1,81 @@
 'use strict';
 
 const hours = require('../utils/hours');
+const estimateParser = require('../utils/estimateParser');
+
+const STATE_COMPLETE = 'complete';
+
+function resolveWorkDates (card, assignment, actionDate, s, memberWorkOption) {
+    if (!assignment.lastWork || actionDate > assignment.lastWork) {
+        assignment.lastWork = actionDate;
+    }
+    if (s) {
+        assignment.firstWork = hours.addWorkHours(actionDate, -s, memberWorkOption);
+    }
+    if (card._done) {
+        assignment.e = assignment.s;
+    }
+}
+
+function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption) {
+    const firstEstimate = date || new Date(card.dateLastActivity);
+    const ret = {
+        id: card.id + (idMember || ''),
+        s,
+        e,
+        name: card.name,
+        cardId: card.id,
+        memberId: idMember,
+        firstWork: null,
+        lastWork: null,
+        r: null,
+        deps: deps.slice(),
+        begin: null,
+        end: null,
+        firstEstimate,
+        progress: e > 0 ? s / e : 0
+    };
+    resolveWorkDates(card, ret, firstEstimate, s, memberWorkOption);
+    ret.r = Math.max(0, ret.e - ret.s);
+    return ret;
+}
 
 function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
     const deps = [];
     const ret = [];
     const memberSet = new Set();
 
+    const nameEstimate = estimateParser(card.name);
+    let subtasksEstimate = 0;
+    let subtasksSpent = 0;
+
+    let allDone = 1;
     for (const list of card.checklists) {
-        if (!list.name.match(/^dep/i)) {
-            continue;
-        }
+        const isDependency = list.name.match(/^dep/i);
         for (const item of list.checkItems) {
-            const match = item.name.match(/https:\/\/trello.com\/c\/([a-zA-Z0-9]{6,10})/);
-            if (match && shortLinks.has(match[1])) {
-                deps.push(shortLinks.get(match[1]));
+            if (isDependency) {
+                const match = item.name.match(/https:\/\/trello.com\/c\/([a-zA-Z0-9]{6,10})/);
+                if (match && shortLinks.has(match[1])) {
+                    deps.push(shortLinks.get(match[1]));
+                }
+            } else if (nameEstimate === 0) {
+                allDone = allDone && item.state === STATE_COMPLETE;
+                const estimate = estimateParser(item.name);
+                if (estimate === 0) {
+                    continue;
+                } else if (item.state === STATE_COMPLETE) {
+                    subtasksSpent += estimate;
+                }
+                subtasksEstimate += estimate;
+            } else {
+                allDone = allDone && item.state === STATE_COMPLETE;
             }
         }
     }
+
+    card._done = allDone === true || card._done;
+
+    const taskByMember = {};
 
     for (const action of card.actions) {
         if (action.type !== 'commentCard') {
@@ -31,47 +89,67 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
         const date = new Date(action.date);
         const s = Number.parseFloat(match[1].replace(',', '.'));
         const e = Number.parseFloat(match[2].replace(',', '.'));
-        const key = action.data.card.id + action.idMemberCreator;
+        const key = card.id + action.idMemberCreator;
 
         let task = taskMap.get(key);
 
         if (!task) {
-            task = {
-                id: key,
-                s,
-                e,
-                name: action.data.card.name,
-                cardId: action.data.card.id,
-                memberId: action.idMemberCreator,
-                firstWork: null,
-                lastWork: null,
-                r: null,
-                deps: deps.slice(),
-                begin: null,
-                end: null,
-                firstEstimate: date,
-                progress: null
-            };
+            task = factoryAssignment(card, action.idMemberCreator, s, e, deps, date);
             memberSet.add(action.idMemberCreator);
             taskMap.set(key, task);
             ret.push(task);
+            taskByMember[action.idMemberCreator] = task;
         } else {
             task.s += s;
             task.e += e;
             task.firstEstimate = date;
+            resolveWorkDates(card, task, date, s, memberWorkOptions[action.memberId]);
         }
-
-        if (!task.lastWork || date > task.lastWork) {
-            task.lastWork = date;
-        }
-
-        if (s) {
-            task.firstWork = hours.addWorkHours(date, -s, memberWorkOptions[action.memberId]);
-        }
-
         task.r = Math.max(0, task.e - task.s);
         task.progress = task.e > 0 ? task.s / task.e : 0;
     }
+
+    // SET_ESTIMATE_TO_ASSIGNEES
+    const staticEstimate = nameEstimate || subtasksEstimate;
+    if (staticEstimate) {
+        if (card.idMembers.length === 0) {
+            // assign to "Planning" member
+            const task = factoryAssignment(card, null, subtasksSpent, staticEstimate, deps);
+            memberSet.add(null);
+            taskMap.set(card.id, task);
+            ret.push(task);
+        } else {
+            const splitEstimate = staticEstimate / card.idMembers.length;
+            const splitSpend = subtasksSpent / card.idMembers.length;
+            for (const idMember of card.idMembers) {
+                if (typeof taskByMember[idMember] === 'undefined') {
+                    // create assignment
+                    const task = factoryAssignment(card, idMember, splitSpend, staticEstimate, deps, memberWorkOptions[idMember]);
+                    memberSet.add(idMember);
+                    taskMap.set(card.id + idMember, task);
+                    ret.push(task);
+                } else {
+                    // compare estimate or reset it when there is no est.
+                    const assignment = taskByMember[idMember];
+                    const splitRemaining = splitEstimate - splitSpend;
+                    if (splitSpend > 0 && assignment.r < splitRemaining) {
+                        assignment.e += assignment.s + splitRemaining;
+                    } else if (assignment.e < splitEstimate) {
+                        assignment.e = splitEstimate;
+                    }
+                    assignment.r = Math.max(0, assignment.e - assignment.s);
+                }
+            }
+        }
+    }
+
+    // 1.commenters === asignees
+    // 2.
+
+    // process checklists
+
+
+
     card.memberSet = memberSet;
     return ret;
 }
@@ -181,10 +259,21 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
 }
 
 module.exports = {
-    resolveToTasks (cards, lists, doingListId, memberWorkOptions, cardsById) {
+    resolveToTasks (cards, lists, memberWorkOptions, cardsById, labelsById) {
         const listsOrder = lists.map(list => list.id);
+        const ignoredLabelIds = [];
+        for (const label of labelsById.values()) {
+            if (label.name.match(/ignore/)) {
+                ignoredLabelIds.push(label.id);
+            }
+        }
 
-        const doingListOrder = listsOrder.indexOf(doingListId);
+        const rightDoingListId = lists
+                .filter(list => list.name.match(/doing|progress/i))
+                .map(list => list.id)
+                .shift();
+
+        const doingListOrder = listsOrder.indexOf(rightDoingListId);
 
         const membersMap = new Map();
         const taskMap = new Map();
@@ -209,8 +298,15 @@ module.exports = {
         });
 
         for (const card of sortedCards) {
-            if (listsOrder.indexOf(card.idList) > doingListOrder) {
+            if (listsOrder.indexOf(card.idList) > (doingListOrder + 1)) {
                 continue;
+            }
+            if (card.idLabels.some(idLabel => ignoredLabelIds.indexOf(idLabel) !== -1)) {
+                continue;
+            }
+            if (listsOrder.indexOf(card.idList) === (doingListOrder + 1)) {
+                // in done list
+                card._done = true;
             }
             const tasks = resolveCardTasks(card, shortLinks, taskMap, memberWorkOptions);
             for (const task of tasks) {

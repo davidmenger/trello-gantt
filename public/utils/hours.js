@@ -1,7 +1,7 @@
 'use strict';
 
 const DEFAULT_OPTIONS = {
-    hours: 6,
+    hours: 8,
     weekDays: 5,
     begin: 10
 };
@@ -27,10 +27,13 @@ module.exports = {
         const hour = date.getHours() + (date.getMinutes() / 60);
         let addHours = hours % options.hours;
         const dayEnd = options.begin + options.hours;
+        let addedHourCorrection = false;
 
         if (addHours + hour > dayEnd) {
             addDays += 1;
             addHours -= options.hours;
+            addHours -= hour - dayEnd;
+            addedHourCorrection = true;
         }
 
         const weeks = Math.floor(addDays / options.weekDays);
@@ -38,7 +41,11 @@ module.exports = {
         const weekend = (7 - options.weekDays);
 
         if (missDays + day > options.weekDays) {
-            addDays += weekend;
+            if (day > options.weekDays && addedHourCorrection) {
+                addDays += 7 - day;
+            } else {
+                addDays += weekend;
+            }
         }
 
         if (hours === 54.82000000000001) {

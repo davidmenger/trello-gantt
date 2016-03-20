@@ -1,4 +1,5 @@
 'use strict';
+/* eslint no-undef: 0*/
 
 require('bootstrap');
 require('../less/default.less');
@@ -6,15 +7,23 @@ require('../less/default.less');
 
 const React = require('react');
 const ReactDom = require('react-dom');
-const App = require('../app.jsx');
+const App = require('./app.jsx');
 const reactRedux = require('react-redux');
 const Provider = reactRedux.Provider;
 const configureStore = require('../store/configureStore');
 const actions = require('../actions/ganttActions');
+const consts = require('../consts');
 
-const store = configureStore();
-
-console.log(store.getState());
+const store = configureStore({
+    groupping: consts.GROUPPING_RELEASE,
+    options: {
+        versionColors: ['black'],
+        appColors: ['green', 'yellow', 'orange'],
+        bugColors: ['red'],
+        projectColors: ['blue', 'sky', 'lime', 'pink'],
+        memberWorkOptions: {}
+    }
+});
 
 ReactDom.render(
     <Provider store={store} >
@@ -23,20 +32,15 @@ ReactDom.render(
     document.getElementById('app')
 );
 
-const devBoardId = '558d0b592553648174835eeb';
-
 Trello.authorize({
     name: 'Test',
     success () {
-        Trello.get(`boards/${devBoardId}/cards?checklists=all&actions=commentCard&fields=due,id,idLabels,name,pos,idList,shortLink,actions`, (cards) => {
-            Trello.get(`boards/${devBoardId}/lists`, (lists) => {
-                Trello.get(`boards/${devBoardId}/members`, (members) => {
-                    Trello.get(`boards/${devBoardId}/labels`, (labels) => {
-                        store.dispatch(actions.trelloResponse({ cards, lists, actions: [], labels, members }));
-                    });
-                });
-            });
-        });
+        store.dispatch(actions.fetchBoardList());
+        store.dispatch(actions.fetchBoard(/* '56eee0aa8d9d6c874fa97ec0'*/'558d0b592553648174835eeb'));
+    },
+    error (e) {
+        console.error(e);
+        Trello.deauthorize();
     }
 });
 
