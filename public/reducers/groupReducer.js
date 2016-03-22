@@ -32,9 +32,13 @@ module.exports = function (state, action) {
             { versionColors });
     }
 
+    const projects = groupper.groupTasks(state.assignments);
+
+    console.log({ projects });
+
     return Object.assign({}, state, {
         groupping: action.groupping,
-        projects: groupper.groupTasks(state.assignments),
+        projects,
         start: groupper.start,
         end: groupper.end
     });

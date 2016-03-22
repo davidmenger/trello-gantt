@@ -4,6 +4,8 @@ const hours = require('../utils/hours');
 const estimateParser = require('../utils/estimateParser');
 
 const STATE_COMPLETE = 'complete';
+const BEFORE_TWO_DAYS = new Date();
+BEFORE_TWO_DAYS.setDate(BEFORE_TWO_DAYS.getDate() - 2);
 
 function resolveWorkDates (card, assignment, actionDate, s, memberWorkOption) {
     if (!assignment.lastWork || actionDate > assignment.lastWork) {
@@ -203,8 +205,9 @@ function taskHasResolvedDeps (task, taskMap, membersMap, cardsById, stack) {
 
 function resolveTask (task, member) {
     if (member.previousEnd === null) {
-        task.begin = hours.addWorkHours(task.lastWork, -task.s, member.workOptions);
-        task.end = hours.addWorkHours(task.lastWork, task.r, member.workOptions);
+        const now = BEFORE_TWO_DAYS > task.lastWork ? new Date() : task.lastWork;
+        task.begin = hours.addWorkHours(now, -task.s, member.workOptions);
+        task.end = hours.addWorkHours(now, task.r, member.workOptions);
     } else {
         if (member.previousEnd < (task.firstWork || task.firstEstimate)) {
             task.begin = task.firstWork || task.firstEstimate;
@@ -269,11 +272,13 @@ module.exports = {
         }
 
         const rightDoingListId = lists
-                .filter(list => list.name.match(/doing|progress/i))
+                .filter(list => list.name.match(/doing/i))
                 .map(list => list.id)
                 .shift();
 
         const doingListOrder = listsOrder.indexOf(rightDoingListId);
+
+        console.log({ rightDoingListId, doingListOrder });
 
         const membersMap = new Map();
         const taskMap = new Map();
@@ -298,7 +303,7 @@ module.exports = {
         });
 
         for (const card of sortedCards) {
-            if (listsOrder.indexOf(card.idList) > (doingListOrder + 1)) {
+            if (listsOrder.indexOf(card.idList) > (doingListOrder + 0)) {
                 continue;
             }
             if (card.idLabels.some(idLabel => ignoredLabelIds.indexOf(idLabel) !== -1)) {

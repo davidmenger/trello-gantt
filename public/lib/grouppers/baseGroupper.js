@@ -179,7 +179,8 @@ class BaseGroupper {
             left: vector.position(assignment.begin, this.matrix),
             width: vector.width(assignment.begin, assignment.end, this.matrix),
             color: this.rowColor(card.idLabels),
-            progress: assignment.progress
+            progress: assignment.progress,
+            assignment
         };
     }
 

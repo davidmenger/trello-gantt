@@ -38,7 +38,7 @@ body {
                 & { position: relative; margin-left: @leftSize; }
                 .task {
                     & { position: absolute; top: 1px; height: 24px; padding: 5px 1px; background: #f2f2f2; border: 1px solid #999;  font-size: 0.7em; }
-                    &:hover { width: auto !important; }
+                    &:hover { width: auto !important; z-index: 1; }
                     &.orange { background-color: lighten(#ffab4a, @lighten); }
                     &.red  { background-color: lighten(#eb5a46, @lighten); }
                     &.green { background-color:  lighten(#61bd4f, @lighten); }

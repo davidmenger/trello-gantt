@@ -32,7 +32,7 @@ module.exports = {
         if (addHours + hour > dayEnd) {
             addDays += 1;
             addHours -= options.hours;
-            addHours -= hour - dayEnd;
+            // addHours -= hour - dayEnd;
             addedHourCorrection = true;
         }
 
@@ -46,10 +46,6 @@ module.exports = {
             } else {
                 addDays += weekend;
             }
-        }
-
-        if (hours === 54.82000000000001) {
-            console.log({ addDays, weeks, hour, day, addHours, missDays, date, dayEnd, weekend });
         }
 
         addDays += weeks * weekend;

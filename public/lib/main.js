@@ -36,7 +36,7 @@ Trello.authorize({
     name: 'Test',
     success () {
         store.dispatch(actions.fetchBoardList());
-        store.dispatch(actions.fetchBoard(/* '56eee0aa8d9d6c874fa97ec0'*/'558d0b592553648174835eeb'));
+        store.dispatch(actions.fetchBoard('569673071c55a5d35d908250'));// /* '56eee0aa8d9d6c874fa97ec0'*/'558d0b592553648174835eeb'));
     },
     error (e) {
         console.error(e);
