@@ -4,13 +4,14 @@
   "description": "",
   "engineStrict": true,
   "engines": {
-    "node": ">=6.x",
+    "node": ">=5.x",
     "npm": ">= 3.3.12"
   },
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "build": "node ./bin/build"
+    "start": "node ./bin/www --harmony_rest_parameters",
+    "build": "node ./bin/build",
+    "lint": "node ./node_modules/eslint/bin/eslint.js -c ./.eslintrc ./public/actions/**/*.js ./public/components/**/*.jsx ./public/lib/**/* ./public/reducers/**/*.js ./public/store/**/*.js ./public/utils/**/*.js ./routes/**/*.js ./lib/**/*.js ./bin/**/*.js ./config/**/*.js"
   },
   "keywords": [
     "koa",
@@ -26,7 +27,7 @@
   "license": "ISC",
   "dependencies": {
     "koa": "^1.1.2",
-    "koa-hbs": "^0.7.0",
+    "koa-hbs": "^0.8.0",
     "koa-router": "^5.3.0",
     "koa-static-cache": "^3.1.4",
     "react": "^0.14.5",
@@ -34,25 +35,30 @@
   },
   "devDependencies": {
     "babel-core": "^6.3.26",
-    "babel-eslint": "^5.0.0",
+    "babel-eslint": "^6.0.0",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "bootstrap": "^3.3.6",
-    "compression-webpack-plugin": "^0.2.0",
+    "bootstrap": "^4.0.0-alpha.2",
+    "compression-webpack-plugin": "^0.3.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.3.0",
     "eslint-config-airbnb": "^6.0.2",
     "eslint-plugin-react": "^4.1.0",
-    "extract-text-webpack-plugin": "^0.9.1",
+    "extract-text-webpack-plugin": "^1.0.0",
     "file-loader": "^0.8.5",
+    "install": "^0.6.1",
     "koa-webpack-dev": "^1.0.2",
     "less": "^2.5.3",
     "less-loader": "^2.2.2",
+    "node-sass": "^3.4.2",
+    "npm": "^3.8.3",
     "react-redux": "^4.0.6",
     "redux": "^3.2.1",
-    "redux-thunk": "^1.0.3",
+    "redux-thunk": "^2.0.0",
+    "sass-loader": "^3.2.0",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.9"
+    "tether": "^1.2.0",
+    "webpack": "^1.12.14"
   }
 }

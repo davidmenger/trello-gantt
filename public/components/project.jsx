@@ -12,7 +12,9 @@ class Project extends React.Component {
 
         return (
             <div className="project">
-                <div className={'projectTitle ' + this.props.project.color}>{this.props.project.name}</div>
+                <div className={`projectTitle ${this.props.project.color}`}>
+                    {this.props.project.name}
+                </div>
                 <div className="lanes">
                     {lanes.map(lane =>
                         <Lane key={lane.id} lane={lane} />

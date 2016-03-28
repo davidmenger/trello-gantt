@@ -21,6 +21,8 @@ module.exports = {
         return (dispatch) => {
             Trello.get('members/me/boards', (boards) => {
                 dispatch(this.boardListResponse(boards));
+            }, () => {
+                Trello.deauthorize();
             });
         };
     },

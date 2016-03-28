@@ -147,7 +147,7 @@ class BaseGroupper {
         return this.labelsById.get(projectId).name;
     }
 
-    getLaneIdByAssignment (assignment, labelIds) {
+    getLaneIdByAssignment (assignment/* , labelIds*/) {
         return assignment.memberId;
     }
 
@@ -159,7 +159,7 @@ class BaseGroupper {
         };
     }
 
-    getLaneNameByAssignment (assignment, card, laneId) {
+    getLaneNameByAssignment (assignment/* , card , laneId*/) {
         if (this.membersById.has(assignment.memberId)) {
             return this.membersById.get(assignment.memberId).fullName;
         }

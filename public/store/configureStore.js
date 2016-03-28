@@ -8,7 +8,7 @@ function configureStore (initialState) {
     const store = redux.createStore(
         reducers,
         initialState,
-        redux.applyMiddleware(reduxThunk));
+        redux.applyMiddleware(reduxThunk.default));
 
     if (module.hot) {
         // Enable Webpack hot module replacement for reducers

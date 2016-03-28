@@ -12,13 +12,19 @@ webpackConfig.plugins.push(uglify);
 
 // add gzip
 const gzip = new CompressionPlugin({
-    asset: '{file}.gz',
+    asset: '[file].gz',
     algorithm: 'gzip',
     regExp: /\.(js|css)$/,
     threshold: 10, // 240,
     minRatio: 0.8
 });
 webpackConfig.plugins.push(gzip);
+
+const definer = new webpack.DefinePlugin({
+    'process.env.NODE_ENV': '"production"'
+});
+
+webpackConfig.plugins.push(definer);
 
 // returns a Compiler instance
 const compiler = webpack(webpackConfig);

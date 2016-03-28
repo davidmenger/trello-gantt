@@ -1,8 +1,9 @@
 'use strict';
 /* eslint no-undef: 0*/
 
+window.Tether = require('tether');
 require('bootstrap');
-require('../less/default.less');
+require('../scss/default.scss');
 // require('babel-core/polyfill');
 
 const React = require('react');
@@ -34,9 +35,10 @@ ReactDom.render(
 
 Trello.authorize({
     name: 'Test',
-    success () {
+    success (x) {
         store.dispatch(actions.fetchBoardList());
-        store.dispatch(actions.fetchBoard('569673071c55a5d35d908250'));// /* '56eee0aa8d9d6c874fa97ec0'*/'558d0b592553648174835eeb'));
+        // /* '56eee0aa8d9d6c874fa97ec0'*/''));
+        store.dispatch(actions.fetchBoard('558d0b592553648174835eeb'));
     },
     error (e) {
         console.error(e);

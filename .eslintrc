@@ -1,12 +1,15 @@
 {
     "extends": "airbnb",
-    "ecmaFeatures": {
-        "defaultParams": false,
-        "destructuring": false,
-        "forOf": true,
-        "generators": true,
-        "modules": false,
-        "jsx": true
+    "parserOptions": {
+        "ecmaFeatures": {
+            "defaultParams": false,
+            "destructuring": false,
+            "forOf": true,
+            "generators": true,
+            "jsx": true,
+            "modules": false
+        },
+        "sourceType": "script"
     },
     "plugins": [ "react" ],
     "rules": {
@@ -19,6 +22,9 @@
         "no-param-reassign": [0, {"props": true}],
         "padded-blocks": 0,
         "default-case": 0,
-        "react/prop-types": 0
+        "react/prop-types": 0,
+        "react/jsx-no-bind": 0,
+        "no-console": 0,
+        "react/jsx-indent-props": [2, 4]
     }
 }

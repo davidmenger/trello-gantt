@@ -113,9 +113,11 @@ function transformActionsToPersonCards (data, cardsOrder, listsOrder) {
 function transformTrelloResponse (data) {
     const listsOrder = data.lists.map(list => list.id)
         .reverse();
-    const cardsOrder = data.cards.map(card => {
-        return { id: card.id, pos: card.pos };
-    })
+    const cardsOrder = data.cards
+        .map((card) => {
+            const obj = { id: card.id, pos: card.pos };
+            return obj;
+        })
         .sort((a, b) => {
             if (a.pos === b.pos) {
                 return 0;

@@ -15,8 +15,10 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.less$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
+                test: /\.s[ca]ss$/,
+                // loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+                loader: ExtractTextPlugin.extract('style-loader', 'css!sass')
+                // loader: 'style!css!sass?sourceMap'
             },
             {
                 test: /\.jsx?$/,

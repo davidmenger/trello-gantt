@@ -126,7 +126,14 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
             for (const idMember of card.idMembers) {
                 if (typeof taskByMember[idMember] === 'undefined') {
                     // create assignment
-                    const task = factoryAssignment(card, idMember, splitSpend, staticEstimate, deps, memberWorkOptions[idMember]);
+                    const task = factoryAssignment(
+                        card,
+                        idMember,
+                        splitSpend,
+                        staticEstimate,
+                        deps,
+                        memberWorkOptions[idMember]);
+
                     memberSet.add(idMember);
                     taskMap.set(card.id + idMember, task);
                     ret.push(task);
@@ -144,13 +151,6 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
             }
         }
     }
-
-    // 1.commenters === asignees
-    // 2.
-
-    // process checklists
-
-
 
     card.memberSet = memberSet;
     return ret;
@@ -179,9 +179,11 @@ function taskHasResolvedDeps (task, taskMap, membersMap, cardsById, stack) {
 
         let success = true;
         let end = null;
+
         for (const memberId of depCard.memberSet) {
             const dep = taskMap.get(depCard.id + memberId);
-            if (!taskHasResolvedDeps(dep, taskMap, membersMap, cardsById, stackSet) || !taskIsResolved(dep)) {
+            const resovedDeps = taskHasResolvedDeps(dep, taskMap, membersMap, cardsById, stackSet);
+            if (!resovedDeps || !taskIsResolved(dep)) {
                 success = false;
             } else if (!end || end < dep.end) {
                 end = dep.end;

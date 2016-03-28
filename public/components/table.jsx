@@ -13,7 +13,8 @@ class Table extends React.Component {
 
         const projects = this.props.projects || [];
         let begin = this.props.start || new Date();
-        let firstStyle = { width: (60 * ((23 - begin.getHours()) / 23)) + 'px' };
+        const firstCellWidth = 60 * ((23 - begin.getHours()) / 23);
+        let firstStyle = { width: `${firstCellWidth}px` };
         const end = this.props.end || begin;
         const days = [];
 
