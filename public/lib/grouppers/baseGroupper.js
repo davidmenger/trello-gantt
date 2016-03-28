@@ -167,6 +167,9 @@ class BaseGroupper {
     }
 
     factoryTask (assignment, card) {
+        const due = card.due ? new Date(card.due) : null;
+        const afterDue = due !== null && due < assignment.end;
+
         return {
             id: assignment.cardId + assignment.memberId,
             name: assignment.name,
@@ -180,7 +183,9 @@ class BaseGroupper {
             width: vector.width(assignment.begin, assignment.end, this.matrix),
             color: this.rowColor(card.idLabels),
             progress: assignment.progress,
-            assignment
+            assignment,
+            due,
+            afterDue
         };
     }
 

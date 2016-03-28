@@ -2,8 +2,8 @@
 /* eslint no-undef: 0*/
 
 window.Tether = require('tether');
-require('bootstrap');
 require('../scss/default.scss');
+require('bootstrap');
 // require('babel-core/polyfill');
 
 const React = require('react');
@@ -27,15 +27,17 @@ const store = configureStore({
 });
 
 ReactDom.render(
-    <Provider store={store} >
-      <App />
-    </Provider>,
+    <div className="container-fluid">
+        <Provider store={store} >
+            <App />
+        </Provider>
+    </div>,
     document.getElementById('app')
 );
 
 Trello.authorize({
     name: 'Test',
-    success (x) {
+    success () {
         store.dispatch(actions.fetchBoardList());
         // /* '56eee0aa8d9d6c874fa97ec0'*/''));
         store.dispatch(actions.fetchBoard('558d0b592553648174835eeb'));

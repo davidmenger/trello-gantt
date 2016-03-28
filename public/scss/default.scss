@@ -52,8 +52,15 @@ $darken: 15%;
                     &.lime { background-color: lighten(#51e898, $lighten); }
                     .cardName { white-space: nowrap; overflow: hidden; }
                     .progressShow { position: absolute; left: 0; top: 0; bottom: 0; background-color: rgba(0,0,0,0.15); border-bottom: 1px solid #d00; }
+                    .due-date {
+                        & { position: absolute; top: 0; right: 0; bottom: 0; background-color: #090; width: 10px; color: #fff; padding: 3px; }
+                        &.due-date-after-due { background-color: #900; }
+                    }
+                    &:hover .due-date { z-index: 1; width: 65px; right: -65px; }
                 }
             }
         }
     }
 }
+
+.navbar select { margin: 7px; }

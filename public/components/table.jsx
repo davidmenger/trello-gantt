@@ -8,7 +8,18 @@ const DAY_MICROSECONDS = 86400000;
 class Table extends React.Component {
     render () {
         if (this.props.loading) {
-            return (<div>loading...</div>);
+            return (
+                <div>
+                    <br />
+                    <progress
+                        className="progress progress-striped progress-animated"
+                        value="100"
+                        max="100"
+                    >
+                        100%
+                    </progress>
+                </div>
+            );
         }
 
         const projects = this.props.projects || [];

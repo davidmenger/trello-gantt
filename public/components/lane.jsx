@@ -3,6 +3,7 @@
 const React = require('react');
 
 class Lane extends React.Component {
+
     render () {
         const tasks = this.props.lane.tasks;
 
@@ -24,6 +25,19 @@ class Lane extends React.Component {
                         const formattedSpend = Math.round(task.s * 10) / 10;
                         const formattedRemaining = Math.round(task.r * 10) / 10;
 
+                        let due = null;
+
+                        if (task.due) {
+                            const afterDueClass = task.afterDue ? ' due-date-after-due' : '';
+                            due = (
+                                <div className={`due-date${afterDueClass}`}>
+                                    <div className="due-label">
+                                        {task.due.toLocaleDateString()}
+                                    </div>
+                                </div>
+                            );
+                        }
+
                         return (
                             <div key={task.id}
                                 className={`task ${task.color || ''}`}
@@ -31,10 +45,12 @@ class Lane extends React.Component {
                             >
                                 <div className="cardName">
                                     {task.name}
-                                    ({task.begin.toLocaleString()} - {task.end.toLocaleString()})
+                                    ({task.begin.toLocaleTimeString()}
+                                    - {task.end.toLocaleTimeString()})
                                     [s:{formattedSpend}, r:{formattedRemaining}]
                                 </div>
                                 <div className="progressShow" style={progressStyle} >&nbsp;</div>
+                                {due}
                             </div>
                         );
                     })}

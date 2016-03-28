@@ -1,9 +1,9 @@
 'use strict';
 
 const DEFAULT_OPTIONS = {
-    hours: 8,
+    hours: 6,
     weekDays: 5,
-    begin: 10
+    begin: 11
 };
 
 module.exports = {

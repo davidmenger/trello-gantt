@@ -19,21 +19,32 @@ class Controls extends React.Component {
         const groupping = this.props.groupping;
 
         return (
-            <div>
-                <select name="board" onChange={this.selectBoard.bind(this)} value={selectedBoardId}>
-                    {boards.map((board) =>
-                         (<option value={board.id} key={board.id}>{board.name}</option>)
-                    )}
-                </select>
-                <select name="groupping"
-                    onChange={this.selectGroupping.bind(this)}
-                    value={groupping}
-                >
-                    <option value={consts.GROUPPING_RELEASE}>Release</option>
-                    <option value={consts.GROUPPING_PROJECT}>Project</option>
-                    <option value={consts.GROUPPING_APP}>App</option>
-                </select>
-            </div>
+            <nav className="navbar navbar-light bg-faded">
+                <a className="navbar-brand" href="#">Trello</a>
+                <ul className="nav navbar-nav">
+                    <li className="nav-item active">
+                        <a className="nav-link" href="#">Home</a>
+                    </li>
+                </ul>
+                <form className="form-inline pull-xs-right">
+                    <select name="board"
+                        onChange={this.selectBoard.bind(this)}
+                        value={selectedBoardId}
+                    >
+                        {boards.map((board) =>
+                            (<option value={board.id} key={board.id}>{board.name}</option>)
+                        )}
+                    </select>
+                    <select name="groupping"
+                        onChange={this.selectGroupping.bind(this)}
+                        value={groupping}
+                    >
+                        <option value={consts.GROUPPING_RELEASE}>Release</option>
+                        <option value={consts.GROUPPING_PROJECT}>Project</option>
+                        <option value={consts.GROUPPING_APP}>App</option>
+                    </select>
+                </form>
+            </nav>
         );
     }
 
