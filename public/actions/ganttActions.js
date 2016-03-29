@@ -35,7 +35,7 @@ module.exports = {
                 + 'name,pos,idList,shortLink,actions';
             const actionSettings = 'actions_fields=date,idMemberCreator,type'
                 + '&actions_memberCreator_fields=username&actions_limit=1000'
-                + '&actions=commentCard'
+                + '&actions=false' // commentCard,updateCheckItemStateOnCard,updateCard:idList'
                 + '&checklists=all';
 
             Trello.get(`boards/${boardId}/cards?fields=${fields}&${actionSettings}`, (cards) => {

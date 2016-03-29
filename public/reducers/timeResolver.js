@@ -79,6 +79,10 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
 
     const taskByMember = {};
 
+    if (!card.actions) {
+        card.actions = [];
+    }
+
     for (const action of card.actions) {
         if (action.type !== 'commentCard') {
             continue;
