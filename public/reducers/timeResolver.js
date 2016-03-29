@@ -185,7 +185,7 @@ function taskHasResolvedDeps (task, taskMap, membersMap, cardsById, stack) {
         let end = null;
 
         for (const memberId of depCard.memberSet) {
-            const dep = taskMap.get(depCard.id + memberId);
+            const dep = taskMap.get(depCard.id + (memberId || ''));
             const resovedDeps = taskHasResolvedDeps(dep, taskMap, membersMap, cardsById, stackSet);
             if (!resovedDeps || !taskIsResolved(dep)) {
                 success = false;
