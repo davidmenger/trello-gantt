@@ -1,7 +1,7 @@
 'use strict';
 
 const DEFAULT_OPTIONS = {
-    hours: 6,
+    hours: 5,
     weekDays: 5,
     begin: 11
 };
