@@ -20,7 +20,7 @@ $darken: 15%;
     .project {
         & { display: inline-block; width: 100%; }
         .projectTitle {
-            & {  padding: 1px 10px; color: #fff; }
+            & {  padding: 3px 10px; color: #fff; }
             &.orange { background-color: darken(#ffab4a, $darken); }
             &.red  { background-color: darken(#eb5a46, $darken); }
             &.green { background-color:  darken(#61bd4f, $darken); }

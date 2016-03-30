@@ -3,7 +3,7 @@
 const React = require('react');
 
 const LINE_HEIGHT = 30;
-const TASK_HEIGHT = 24;
+const TASK_HEIGHT = 22;
 
 class Lane extends React.Component {
 
@@ -72,10 +72,10 @@ class Lane extends React.Component {
                             deps.push(
                                 <div
                                     className="dep-line"
-                                    key={`h${coords.id}`}
+                                    key={`v${coords.id}`}
                                     style={{
                                         left: `${top.x}px`,
-                                        top: `${top.y}px`,
+                                        top: `${Math.min(top.y, from.y)}px`,
                                         height: `${Math.abs(top.y - from.y)}px`
                                     }}
                                 />
@@ -84,7 +84,7 @@ class Lane extends React.Component {
                             deps.push(
                                 <div
                                     className="dep-line"
-                                    key={`v${coords.id}`}
+                                    key={`h${coords.id}`}
                                     style={{
                                         left: `${to.x}px`,
                                         top: `${to.y}px`,
