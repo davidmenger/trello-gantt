@@ -35,6 +35,7 @@ $darken: 15%;
         .lane {
             & { clear: left; height: 30px; }
             .label { float: left; width: $leftSize; overflow: hidden; padding: 7px 0; white-space: nowrap; color: #555; text-align: left; }
+            .label a { color: #444; }
             .lane-row {
                 & { position: relative; margin-left: $leftSize; }
                 .task {

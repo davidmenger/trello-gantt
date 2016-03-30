@@ -35,7 +35,7 @@ module.exports = {
         return (dispatch) => {
             dispatch({ type: consts.BOARD_SELECT, boardId });
             const fields = 'idMembers,dateLastActivity,due,id,idLabels,'
-                + 'name,pos,idList,shortLink,actions';
+                + 'name,pos,idList,shortLink,actions,shortUrl';
             const actionSettings = 'actions_fields=date,idMemberCreator,type'
                 + '&actions_memberCreator_fields=username&actions_limit=1000'
                 + '&actions=false' // commentCard,updateCheckItemStateOnCard,updateCard:idList'

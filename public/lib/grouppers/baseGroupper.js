@@ -93,8 +93,6 @@ class BaseGroupper {
          * ]
          */
 
-        console.log('RA', { assignments });
-
         const filtered = this.filterAndMakeBounds(assignments);
 
         const projects = new Map();
@@ -147,18 +145,11 @@ class BaseGroupper {
             }
         }
 
-        console.log({ taskMap, tasks });
-
         for (const task of tasks) {
             const deps = task.assignment.depCardIds;
-            if (deps.length) {
-                console.log('D', deps);
-            }
             for (const cardId of deps) {
                 const mapArray = taskMap.get(cardId) || [];
-                console.log('M', mapArray);
                 for (const coords of mapArray) {
-                    console.log({ coords, task });
                     task.deps.push(coords);
                 }
             }
@@ -238,7 +229,8 @@ class BaseGroupper {
             due,
             afterDue,
             deps: [],
-            index: null
+            index: null,
+            link: card.shortUrl
         };
     }
 

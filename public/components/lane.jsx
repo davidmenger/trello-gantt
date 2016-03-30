@@ -10,9 +10,15 @@ class Lane extends React.Component {
     render () {
         const tasks = this.props.lane.tasks;
 
+        let laneName = this.props.lane.name;
+
+        if (tasks.length === 1) {
+            laneName = (<a href={tasks[0].link} target="_blank">{laneName}</a>);
+        }
+
         return (
             <div className="lane">
-                <div className="label">{this.props.lane.name}</div>
+                <div className="label">{laneName}</div>
                 <div className="lane-row">
                     {tasks.map(task => {
                         const style = {
