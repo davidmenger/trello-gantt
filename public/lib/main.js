@@ -19,9 +19,9 @@ const store = configureStore({
     groupping: consts.GROUPPING_GANTT,
     options: {
         versionColors: ['black'],
-        appColors: ['green', 'yellow', 'orange'],
+        appColors: ['green', 'yellow', 'orange', 'sky'],
         bugColors: ['red'],
-        projectColors: ['blue', 'sky', 'lime', 'pink'],
+        projectColors: ['blue', 'lime', 'pink'],
         memberWorkOptions: {}
     }
 });
