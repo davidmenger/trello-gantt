@@ -54,7 +54,8 @@ module.exports = function (state, action) {
         }), ganttActions.changeGroupping(state.groupping));
     }
 
-    if (action.type === consts.CHANGE_GROUPPING) {
+    if (action.type === consts.CHANGE_GROUPPING
+        || action.type === consts.SELECT_LABEL) {
 
         return groupReducer(state, action);
     }

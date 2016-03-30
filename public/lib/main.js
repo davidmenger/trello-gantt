@@ -16,7 +16,7 @@ const actions = require('../actions/ganttActions');
 const consts = require('../consts');
 
 const store = configureStore({
-    groupping: consts.GROUPPING_RELEASE,
+    groupping: consts.GROUPPING_GANTT,
     options: {
         versionColors: ['black'],
         appColors: ['green', 'yellow', 'orange'],

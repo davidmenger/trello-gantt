@@ -32,6 +32,7 @@ function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption) 
         lastWork: null,
         r: null,
         deps: deps.slice(),
+        depCardIds: deps.slice(),
         begin: null,
         end: null,
         firstEstimate,

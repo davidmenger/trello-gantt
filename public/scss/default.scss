@@ -7,7 +7,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
-$leftSize: 120px;
+$leftSize: 350px;
 $lighten: 25%;
 $darken: 15%;
 
@@ -34,7 +34,7 @@ $darken: 15%;
         }
         .lane {
             & { clear: left; height: 30px; }
-            .label { float: left; width: $leftSize; overflow: hidden; padding: 7px 0; white-space: nowrap; color: #555; }
+            .label { float: left; width: $leftSize; overflow: hidden; padding: 7px 0; white-space: nowrap; color: #555; text-align: left; }
             .lane-row {
                 & { position: relative; margin-left: $leftSize; }
                 .task {
@@ -62,5 +62,7 @@ $darken: 15%;
         }
     }
 }
+
+.dep-line { position: absolute; background: #000; z-index: 10; width: 1px; height: 1px; }
 
 .navbar select { margin: 7px; }

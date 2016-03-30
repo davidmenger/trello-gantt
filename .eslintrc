@@ -15,7 +15,7 @@
     "rules": {
         "func-names": 0,
         "strict": [2, "global"],
-        "indent": [2, 4],
+        "indent": [2, 4, {"SwitchCase": 1}],
         "space-before-function-paren": [2, {"anonymous": "always", "named": "always"}],
         "comma-dangle": [2, "never"],
         "no-unused-vars": [2, {"vars": "all", "args": "after-used"}],

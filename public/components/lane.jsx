@@ -2,6 +2,9 @@
 
 const React = require('react');
 
+const LINE_HEIGHT = 30;
+const TASK_HEIGHT = 24;
+
 class Lane extends React.Component {
 
     render () {
@@ -38,6 +41,59 @@ class Lane extends React.Component {
                             );
                         }
 
+                        const deps = [];
+
+                        task.deps.forEach((coords) => {
+
+                            if (coords.topIndex === task.index) {
+                                return;
+                            }
+
+                            const posDiff = coords.topIndex - task.index;
+
+                            const from = {
+                                x: 2,
+                                y: posDiff > 0 ? TASK_HEIGHT : 0
+                            };
+
+                            const top = {
+                                x: from.x,
+                                y: from.y + (posDiff * LINE_HEIGHT) + ((posDiff > 0 ? -1 : 1) * TASK_HEIGHT / 2)
+                            };
+
+                            const to = {
+                                x: (coords.left - task.left) - 2,
+                                y: top.y
+                            };
+
+
+                            console.log({ to });
+
+                            deps.push(
+                                <div
+                                    className="dep-line"
+                                    key={`h${coords.id}`}
+                                    style={{
+                                        left: `${top.x}px`,
+                                        top: `${top.y}px`,
+                                        height: `${Math.abs(top.y - from.y)}px`
+                                    }}
+                                />
+                            );
+
+                            deps.push(
+                                <div
+                                    className="dep-line"
+                                    key={`v${coords.id}`}
+                                    style={{
+                                        left: `${to.x}px`,
+                                        top: `${to.y}px`,
+                                        width: `${Math.max(top.x - to.x, 0)}px`
+                                    }}
+                                />
+                            );
+                        });
+
                         return (
                             <div key={task.id}
                                 className={`task ${task.color || ''}`}
@@ -51,6 +107,7 @@ class Lane extends React.Component {
                                 </div>
                                 <div className="progressShow" style={progressStyle} >&nbsp;</div>
                                 {due}
+                                {deps}
                             </div>
                         );
                     })}

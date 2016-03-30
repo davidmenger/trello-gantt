@@ -27,6 +27,9 @@ module.exports = {
         };
     },
 
+    selectLabel (labelId) {
+        return { type: consts.SELECT_LABEL, labelId };
+    },
 
     fetchBoard (boardId) {
         return (dispatch) => {

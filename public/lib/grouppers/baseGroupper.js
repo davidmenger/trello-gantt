@@ -73,7 +73,11 @@ class BaseGroupper {
 
     shouldBeIncluded (assignment) {
         const labelIds = this.getCardByAssignment(assignment).idLabels;
-        return this.getProjectIdByAssignment(assignment, labelIds) !== null;
+
+        const labelIsMatching = !this.options.selectedLabelId
+            || labelIds.indexOf(this.options.selectedLabelId) !== -1;
+
+        return this.getProjectIdByAssignment(assignment, labelIds) !== null && labelIsMatching;
     }
 
     getCardByAssignment (assignment) {
@@ -94,6 +98,7 @@ class BaseGroupper {
         const filtered = this.filterAndMakeBounds(assignments);
 
         const projects = new Map();
+        const tasks = new Set();
 
         for (const assignment of filtered) {
             const card = this.getCardByAssignment(assignment);
@@ -115,7 +120,48 @@ class BaseGroupper {
                 project.lanes.set(laneId, lane);
             }
 
-            lane.tasks.push(this.factoryTask(assignment, card));
+            const task = this.factoryTask(assignment, card);
+            lane.tasks.push(task);
+            tasks.add(task);
+        }
+
+        let i = 0;
+        const taskMap = new Map();
+        for (const project of projects.values()) {
+            i++;
+            for (const lane of project.lanes.values()) {
+                i++;
+                for (const task of lane.tasks) {
+                    let mapArray = taskMap.get(task.assignment.cardId);
+                    if (!mapArray) {
+                        mapArray = [];
+                        taskMap.set(task.assignment.cardId, mapArray);
+                    }
+                    mapArray.push({
+                        id: task.id,
+                        topIndex: i,
+                        left: task.left + task.width
+                    });
+                    task.index = i;
+                }
+            }
+        }
+
+        console.log({ taskMap, tasks });
+
+        for (const task of tasks) {
+            const deps = task.assignment.depCardIds;
+            if (deps.length) {
+                console.log('D', deps);
+            }
+            for (const cardId of deps) {
+                const mapArray = taskMap.get(cardId) || [];
+                console.log('M', mapArray);
+                for (const coords of mapArray) {
+                    console.log({ coords, task });
+                    task.deps.push(coords);
+                }
+            }
         }
 
         return Array.from(projects.values());
@@ -135,11 +181,16 @@ class BaseGroupper {
     }
 
     factoryProjectWithId (assignment, card, projectId) {
+
+        const labelIds = card.idLabels;
+        const labelId = this.labelAttribute(labelIds,
+            label => this.options.versionColors.indexOf(label.color) !== -1);
+
         return {
             id: `p${projectId}`,
             name: this.getProjectNameByAssignment(assignment, card, projectId),
             lanes: new Map(),
-            color: this.labelsById.get(projectId).color
+            color: this.labelsById.get(labelId).color
         };
     }
 
@@ -185,7 +236,9 @@ class BaseGroupper {
             progress: assignment.progress,
             assignment,
             due,
-            afterDue
+            afterDue,
+            deps: [],
+            index: null
         };
     }
 
