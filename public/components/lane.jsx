@@ -47,7 +47,7 @@ class Lane extends React.Component {
                             );
                         }
 
-                        const deps = [];
+                        let deps = [];
 
                         task.deps.forEach((coords) => {
 
@@ -71,9 +71,6 @@ class Lane extends React.Component {
                                 x: (coords.left - task.left) - 2,
                                 y: top.y
                             };
-
-
-                            console.log({ to });
 
                             deps.push(
                                 <div
@@ -99,6 +96,10 @@ class Lane extends React.Component {
                                 />
                             );
                         });
+
+                        if (deps.length > 5) {
+                            deps = [];
+                        }
 
                         return (
                             <div key={task.id}
