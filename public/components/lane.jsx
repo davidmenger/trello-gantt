@@ -48,6 +48,8 @@ class Lane extends React.Component {
                         }
 
                         let deps = [];
+                        let shortestLength = Number.MAX_SAFE_INTEGER;
+                        let shortestIndex = -1;
 
                         task.deps.forEach((coords) => {
 
@@ -72,6 +74,13 @@ class Lane extends React.Component {
                                 y: top.y
                             };
 
+                            const len = Math.max(top.x - to.x, 0);
+
+                            if (len < shortestLength) {
+                                shortestIndex = deps.length;
+                                shortestLength = len;
+                            }
+
                             deps.push(
                                 <div
                                     className="dep-line"
@@ -91,14 +100,17 @@ class Lane extends React.Component {
                                     style={{
                                         left: `${to.x}px`,
                                         top: `${to.y}px`,
-                                        width: `${Math.max(top.x - to.x, 0)}px`
+                                        width: `${len}px`
                                     }}
                                 />
                             );
                         });
 
-                        if (deps.length > 5) {
-                            deps = [];
+                        if (deps.length > 6) {
+                            deps = [
+                                deps[shortestIndex],
+                                deps[shortestIndex + 1]
+                            ];
                         }
 
                         return (

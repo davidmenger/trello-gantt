@@ -261,11 +261,20 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
         } else {
             // store in buffer
             taskList.splice(i, 1);
+            buffer.push(task);
             for (const dep of task.deps) {
                 waitsFor.add(dep);
             }
         }
     }
+    buffer.forEach((task) => {
+        if (taskHasResolvedDeps(task, taskMap, membersMap, cardsById)) {
+            // resolve it
+            const member = membersMap.get(task.memberId);
+            resolveTask(task, member);
+            taskList.push(task);
+        }
+    });
 }
 
 module.exports = {
