@@ -27,7 +27,7 @@ const store = configureStore({
 });
 
 ReactDom.render(
-    <div className="container-fluid">
+    <div className="container-fluid wrapper">
         <Provider store={store} >
             <App />
         </Provider>

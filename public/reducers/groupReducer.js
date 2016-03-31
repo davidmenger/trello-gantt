@@ -61,6 +61,7 @@ module.exports = function (state, action) {
         projects,
         selectedLabelId,
         start: groupper.start,
-        end: groupper.end
+        end: groupper.end,
+        width: groupper.width
     });
 };
