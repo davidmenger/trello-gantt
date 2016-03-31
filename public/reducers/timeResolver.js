@@ -237,7 +237,6 @@ function resolveTask (task, member) {
 }
 
 function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
-    const waitsFor = new Set();
     const buffer = [];
     let i = 0;
     while (i < taskList.length) {
@@ -246,15 +245,12 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
         if (taskHasResolvedDeps(task, taskMap, membersMap, cardsById)) {
             // resolve it
             resolveTask(task, member);
-            // let's
-            if (waitsFor.delete(task.id)) {
-                for (let k = buffer.length - 1; k >= 0; k--) {
-                    const depTask = buffer[k];
-                    if (taskHasResolvedDeps(depTask, taskMap, membersMap, cardsById)) {
-                        taskList.splice(i + 1, 0, depTask);
-                        buffer.splice(k, 1);
-                        waitsFor.delete(depTask.id);
-                    }
+
+            for (let k = buffer.length - 1; k >= 0; k--) {
+                const depTask = buffer[k];
+                if (taskHasResolvedDeps(depTask, taskMap, membersMap, cardsById)) {
+                    taskList.splice(i + 1, 0, depTask);
+                    buffer.splice(k, 1);
                 }
             }
             i++;
@@ -262,19 +258,8 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
             // store in buffer
             taskList.splice(i, 1);
             buffer.push(task);
-            for (const dep of task.deps) {
-                waitsFor.add(dep);
-            }
         }
     }
-    buffer.forEach((task) => {
-        if (taskHasResolvedDeps(task, taskMap, membersMap, cardsById)) {
-            // resolve it
-            const member = membersMap.get(task.memberId);
-            resolveTask(task, member);
-            taskList.push(task);
-        }
-    });
 }
 
 module.exports = {
