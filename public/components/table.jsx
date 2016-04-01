@@ -38,7 +38,7 @@ class Table extends React.Component {
         }
 
         return (
-            <div className="graphContainer">
+            <div className="graphContainer" style={{ width: `${this.props.width}px` }}>
                 <div className="days">
                     {days}
                 </div>
