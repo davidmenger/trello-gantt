@@ -39,6 +39,8 @@ class BaseGroupper {
          * @type {Object}
          */
         this.options = options || {};
+
+        this.width = null;
     }
 
     filterAndMakeBounds (assignments) {
@@ -67,6 +69,7 @@ class BaseGroupper {
         this.matrix = vector.makeMatrix(start || new Date(), end || new Date(), 60);
         this.start = start;
         this.end = end;
+        this.width = vector.position(end, this.matrix) + 350;
 
         return filtered;
     }
