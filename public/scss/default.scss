@@ -1,18 +1,32 @@
 @import '~tether/src/css/tether';
 @import '~bootstrap/scss/bootstrap-flex';
 
-
+html {
+    min-height:100%;
+    position:relative;
+}
 body {
     color: #555;
     font-family: Arial, sans-serif;
+    height:100%;
 }
 
 $leftSize: 350px;
 $lighten: 25%;
 $darken: 15%;
+#app {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:-1;
+}
 
+.wrapper {
+}
 .graphContainer {
-    & { overflow-x: auto; position: relative; }
+    & { position: relative; }
     .days {
         & { position: absolute; top: 0; left: $leftSize; bottom: 0; right: 0; white-space: nowrap; overflow-x: visible; z-index: -1;}
         .day { width: 60px; height: 100%; position: relative; top: 0; bottom: 0; background: #fbfbfb; border-right: 1px solid #eee; display: inline-block; text-align: center; }

@@ -9,9 +9,13 @@ const Controls = require('../components/controls.jsx');
 
 class App extends React.Component {
 
+    componentDidMount() {
+        console.log(this);
+    }
+
     render () {
         return (
-            <div>
+            <div style={{width: `${this.props.width}px`}}>
                 <Controls {...this.props} />
                 <Table {...this.props} />
             </div>
