@@ -41,7 +41,7 @@ app.use(routes.routes());
 
 const publicPath = path.join(__dirname, 'public');
 
-if (config.debugEnabled) {
+if (false && config.debugEnabled) {
     const koaWebpackDev = require('koa-webpack-dev');
     const webpackConfig = require('./webpack.config');
 
