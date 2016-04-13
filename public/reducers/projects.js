@@ -32,12 +32,17 @@ module.exports = function (state, action) {
         const labelsById = action.data.labels
             .reduce((res, label) => res.set(label.id, label), new Map());
 
+        const appLabelIds = action.data.labels
+            .filter((label) => state.options.appColors.indexOf(label.color) !== -1)
+            .map((label) => label.id);
+
         const assignments = timeResolver.resolveToTasks(
             action.data.cards,
             action.data.lists,
             state.options.memberWorkOptions,
             cardsById,
-            labelsById
+            labelsById,
+            appLabelIds
         );
 
         const membersById = action.data.members

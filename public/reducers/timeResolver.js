@@ -19,8 +19,16 @@ function resolveWorkDates (card, assignment, actionDate, s, memberWorkOption) {
     }
 }
 
-function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption) {
+function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption, projectLabelIds) {
     const firstEstimate = date || new Date(card.dateLastActivity);
+
+    let teamLabelId = card.idLabels
+        .filter((labelId) => projectLabelIds.indexOf(labelId) !== -1)[0];
+
+    if (teamLabelId) {
+        teamLabelId = `-${teamLabelId}`;
+    }
+
     const ret = {
         id: card.id + (idMember || ''),
         s,
@@ -28,6 +36,7 @@ function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption) 
         name: card.name,
         cardId: card.id,
         memberId: idMember,
+        _groupByMember: idMember || teamLabelId || null,
         firstWork: null,
         lastWork: null,
         r: null,
@@ -43,7 +52,7 @@ function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption) 
     return ret;
 }
 
-function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
+function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions, projectLabelIds) {
     const deps = [];
     const ret = [];
     const memberSet = new Set();
@@ -101,7 +110,8 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
         let task = taskMap.get(key);
 
         if (!task) {
-            task = factoryAssignment(card, action.idMemberCreator, s, e, deps, date);
+            task = factoryAssignment(card, action.idMemberCreator, s, e, deps, date,
+                memberWorkOptions[action.idMemberCreator], projectLabelIds);
             memberSet.add(action.idMemberCreator);
             taskMap.set(key, task);
             ret.push(task);
@@ -121,8 +131,17 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
     if (staticEstimate) {
         if (card.idMembers.length === 0) {
             // assign to "Planning" member
-            const task = factoryAssignment(card, null, subtasksSpent, staticEstimate, deps);
-            memberSet.add(null);
+            const task = factoryAssignment(
+                card,
+                null,
+                subtasksSpent,
+                staticEstimate,
+                deps,
+                null,
+                null,
+                projectLabelIds
+            );
+            memberSet.add(task._groupByMember);
             taskMap.set(card.id, task);
             ret.push(task);
         } else {
@@ -137,7 +156,9 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions) {
                         splitSpend,
                         staticEstimate,
                         deps,
-                        memberWorkOptions[idMember]);
+                        null,
+                        memberWorkOptions[idMember],
+                        projectLabelIds);
 
                     memberSet.add(idMember);
                     taskMap.set(card.id + idMember, task);
@@ -186,7 +207,11 @@ function taskHasResolvedDeps (task, taskMap, membersMap, cardsById, stack) {
         let end = null;
 
         for (const memberId of depCard.memberSet) {
-            const dep = taskMap.get(depCard.id + (memberId || ''));
+            let suffix = (memberId || '');
+            if (suffix.match(/^-/)) {
+                suffix = '';
+            }
+            const dep = taskMap.get(depCard.id + suffix);
             const resovedDeps = taskHasResolvedDeps(dep, taskMap, membersMap, cardsById, stackSet);
             if (!resovedDeps || !taskIsResolved(dep)) {
                 success = false;
@@ -196,7 +221,7 @@ function taskHasResolvedDeps (task, taskMap, membersMap, cardsById, stack) {
         }
 
         if (success) {
-            const member = membersMap.get(task.memberId);
+            const member = membersMap.get(task._groupByMember);
             if (end > member.previousEnd) {
                 member.previousEnd = end;
             }
@@ -241,7 +266,7 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
     let i = 0;
     while (i < taskList.length) {
         const task = taskList[i];
-        const member = membersMap.get(task.memberId);
+        const member = membersMap.get(task._groupByMember);
         if (taskHasResolvedDeps(task, taskMap, membersMap, cardsById)) {
             // resolve it
             resolveTask(task, member);
@@ -263,7 +288,7 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
 }
 
 module.exports = {
-    resolveToTasks (cards, lists, memberWorkOptions, cardsById, labelsById) {
+    resolveToTasks (cards, lists, memberWorkOptions, cardsById, labelsById, projectLabelIds) {
         const listsOrder = lists.map(list => list.id);
         const ignoredLabelIds = [];
         for (const label of labelsById.values()) {
@@ -314,16 +339,22 @@ module.exports = {
                 // in done list
                 card._done = true;
             }
-            const tasks = resolveCardTasks(card, shortLinks, taskMap, memberWorkOptions);
+            const tasks = resolveCardTasks(
+                card,
+                shortLinks,
+                taskMap,
+                memberWorkOptions,
+                projectLabelIds || []);
+
             for (const task of tasks) {
-                let member = membersMap.get(task.memberId);
+                let member = membersMap.get(task._groupByMember);
                 if (!member) {
                     member = {
-                        id: task.memberId,
+                        id: task._groupByMember,
                         previousEnd: null,
                         workOptions: memberWorkOptions[task.memberId]
                     };
-                    membersMap.set(task.memberId, member);
+                    membersMap.set(task._groupByMember, member);
                 }
                 taskList.push(task);
             }

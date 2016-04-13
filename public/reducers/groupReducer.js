@@ -29,7 +29,11 @@ module.exports = function (state, action) {
                 state.cardsById,
                 state.membersById,
                 state.labelsById,
-                { selectedLabelId, versionColors: [] }
+                {
+                    selectedLabelId,
+                    versionColors: [],
+                    appColors: state.options.appColors
+                }
             );
             break;
         case consts.GROUPPING_RELEASE:

@@ -8,6 +8,8 @@ const DEFAULT_OPTIONS = {
 
 module.exports = {
 
+    DEFAULT_WORK_HOURS: DEFAULT_OPTIONS.hours,
+
     /**
      * @param {Date} date
      * @param {Number} hours
