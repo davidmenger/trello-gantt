@@ -6,11 +6,13 @@ const koaHbs = require('koa-hbs');
 const koaStaticCache = require('koa-static-cache');
 
 const config = require('./config');
-const routes = require('./routes');
 
 // initialize configuration
 config.initialize(process.env.NODE_ENV);
 
+const db = require('./lib/db');
+
+const routes = require('./routes');
 const app = new Koa();
 
 // set up view engine
@@ -41,7 +43,7 @@ app.use(routes.routes());
 
 const publicPath = path.join(__dirname, 'public');
 
-if (config.debugEnabled) {
+if (false && config.debugEnabled) {
     const koaWebpackDev = require('koa-webpack-dev');
     const webpackConfig = require('./webpack.config');
 

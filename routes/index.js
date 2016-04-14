@@ -5,13 +5,11 @@
 
 // create a router instance
 const KoaRouter = require('koa-router');
+const login = require('./login');
 
 const router = new KoaRouter();
 
-// homepage
-router.get('/', function *() {
-    // render index.hbs template
-    yield this.render('index');
-});
+// for '/' path
+router.use(login.routes(), login.allowedMethods());
 
 module.exports = router;

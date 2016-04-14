@@ -1,5 +1,6 @@
 'use strict';
 
+const config = require('./config');
 
 module.exports = {
 
@@ -21,6 +22,7 @@ module.exports = {
         if (!environment) {
             return;
         }
+        Object.assign(this, config);
         try {
             const configuration = require(`./config.${environment}`);
             Object.assign(this, configuration);
