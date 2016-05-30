@@ -2,6 +2,7 @@
 
 const KoaRouter = require('koa-router');
 const auth = require('../../lib/auth');
+const tokens = require('../../lib/tokens');
 
 const router = new KoaRouter();
 
@@ -28,12 +29,18 @@ router.get('/login', function *() {
     const secret = this.cookies.get(AUTH_COOKIE_NAME);
 
     if (this.query.oauth_token && this.query.oauth_verifier && secret) {
-        const token = yield auth.getAuthorizedToken(
+
+        const trelloToken = yield auth.getAuthorizedToken(
             this.query.oauth_token,
             secret,
             this.query.oauth_verifier
         );
-        console.log('YES', token);
+
+        const token = yield tokens.createToken({
+            trelloToken
+        });
+
+        this.cookies.set()
     }
 
     if (secret) {

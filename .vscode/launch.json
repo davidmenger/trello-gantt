@@ -11,7 +11,8 @@
 			"cwd": "${workspaceRoot}",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
-				"--nolazy"
+				"--nolazy",
+				"--harmony_rest_parameters"
 			],
 			"env": {
 				"NODE_ENV": "development"

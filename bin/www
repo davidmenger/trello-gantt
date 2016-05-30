@@ -29,45 +29,47 @@ function normalizePort (val) {
 }
 
 
-const server = http.createServer(app.callback());
+app((application) => {
+    const server = http.createServer(application.callback());
 
-// fetch port from environment variable
-const port = normalizePort(process.env.PORT || 3000);
+    // fetch port from environment variable
+    const port = normalizePort(process.env.PORT || 3000);
 
-// start server
-server.listen(port);
+    // start server
+    server.listen(port);
 
-// user wants to know, where to open a browser
-server.on('listening', () => {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
+    // user wants to know, where to open a browser
+    server.on('listening', () => {
+        const addr = server.address();
+        const bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
 
-    console.log('Listening on ' + bind);
-});
+        console.log('Listening on ' + bind);
+    });
 
-// or when there is an error
-server.on('error', (error) => {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
+    // or when there is an error
+    server.on('error', (error) => {
+        if (error.syscall !== 'listen') {
+            throw error;
+        }
 
-    const bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+        const bind = typeof port === 'string'
+            ? 'Pipe ' + port
+            : 'Port ' + port;
 
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-    case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-    case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
-        break;
-    default:
-        throw error;
-    }
-});
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    });
+})
