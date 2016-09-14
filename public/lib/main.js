@@ -40,7 +40,7 @@ Trello.authorize({
     success () {
         store.dispatch(actions.fetchBoardList());
         // /* '56eee0aa8d9d6c874fa97ec0'*/''));
-        store.dispatch(actions.fetchBoard('558d0b592553648174835eeb'));
+        store.dispatch(actions.fetchBoard('57d7b74ca1c4d52cf978eb5a'));
     },
     error (e) {
         console.error(e);
