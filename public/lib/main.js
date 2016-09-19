@@ -18,10 +18,10 @@ const consts = require('../consts');
 const store = configureStore({
     groupping: consts.GROUPPING_GANTT,
     options: {
-        versionColors: ['black'],
-        appColors: ['green', 'yellow', 'orange', 'sky'],
+        versionColors: [],
+        appColors: ['green', 'yellow', 'orange'],
         bugColors: ['red'],
-        projectColors: ['blue', 'lime', 'pink'],
+        projectColors: ['blue', 'lime', 'pink', 'sky', 'black'],
         memberWorkOptions: {}
     }
 });
