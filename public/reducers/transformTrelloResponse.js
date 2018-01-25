@@ -3,7 +3,7 @@
 const hours = require('../utils/hours');
 
 const trelloStatics = {
-    doingListId: '558d0b9cb1dfa6f3cc1066e6'
+    doingListId: '5a6a37f58c78d737227e64e0'
 };
 
 function transformActionsToPersonCards (data, cardsOrder, listsOrder) {
