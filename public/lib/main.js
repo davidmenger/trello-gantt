@@ -2,7 +2,7 @@
 /* eslint no-undef: 0*/
 
 window.Tether = require('tether');
-require('../scss/default.scss');
+// require('../scss/default.scss');
 require('bootstrap');
 // require('babel-core/polyfill');
 
