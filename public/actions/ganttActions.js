@@ -32,6 +32,7 @@ module.exports = {
     },
 
     fetchBoard (boardId) {
+        window.location.hash = boardId;
         return (dispatch) => {
             dispatch({ type: consts.BOARD_SELECT, boardId });
             const fields = 'idMembers,dateLastActivity,due,id,idLabels,'

@@ -298,7 +298,7 @@ module.exports = {
         }
 
         const rightDoingListId = lists
-                .filter(list => list.name.match(/doing/i))
+                .filter(list => list.name.match(/doing|progress/i))
                 .map(list => list.id)
                 .shift();
 
