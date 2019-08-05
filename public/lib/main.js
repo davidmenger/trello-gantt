@@ -25,7 +25,7 @@ const store = configureStore({
         memberWorkOptions: {
             '516d53c7096722b434001fb2': {
                 hours: 6,
-                weekDays: 4, // two of four out
+                weekDays: 3, // two of four out
                 begin: 10
             }
         }
@@ -47,7 +47,7 @@ Trello.authorize({
         store.dispatch(actions.fetchBoardList());
         // /* '56eee0aa8d9d6c874fa97ec0'*/''));
         const fetch = `${window.location.hash || ''}`.replace(/\#/, '');
-        store.dispatch(actions.fetchBoard(fetch || '5a6a36a7a87820c3718a8d08'));
+        store.dispatch(actions.fetchBoard(fetch || '5cc6b93ee741391095b80117'));
     },
     error (e) {
         console.error(e);

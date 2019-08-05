@@ -2,7 +2,7 @@
 
 const hours = require('./hours');
 
-const ESTIMATE_REGEX = /[\[\`]([0-9]+([.,][0-9]+)?)([mhd])[\]\`]/i;
+const ESTIMATE_REGEX = /[\[\`]([0-9]+([.,][0-9]+)?)m?([mhd])[\]\`]/i;
 
 /**
  * parses [1.5d], [5,7h], [1m] (days, hours minutes)
