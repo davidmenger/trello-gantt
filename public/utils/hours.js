@@ -2,7 +2,7 @@
 
 const DEFAULT_OPTIONS = {
     hours: 6,
-    weekDays: 3,
+    weekDays: 4,
     begin: 11
 };
 

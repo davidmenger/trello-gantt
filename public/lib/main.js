@@ -19,16 +19,10 @@ const store = configureStore({
     groupping: consts.GROUPPING_GANTT,
     options: {
         versionColors: [],
-        appColors: ['green', 'yellow', 'orange'],
+        appColors: ['green', 'yellow'],
         bugColors: ['red'],
-        projectColors: ['blue', 'lime', 'pink', 'sky', 'black'],
-        memberWorkOptions: {
-            '516d53c7096722b434001fb2': {
-                hours: 6,
-                weekDays: 3, // two of four out
-                begin: 10
-            }
-        }
+        projectColors: ['blue', 'lime', 'pink', 'sky', 'black', 'orange'],
+        memberWorkOptions: {}
     }
 });
 

@@ -8,9 +8,6 @@ const trelloStatics = {
 
 function transformActionsToPersonCards (data, cardsOrder, listsOrder) {
 
-    console.info({ xxx: data });
-    debugger;
-
     const doingListOrder = listsOrder.indexOf(trelloStatics.doingListId);
 
     const memberCardsMap = data.actions.reduce((res, action) => {
