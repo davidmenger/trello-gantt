@@ -52,7 +52,7 @@ function factoryAssignment (card, idMember, s, e, deps, date, memberWorkOption, 
     return ret;
 }
 
-function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions, projectLabelIds) {
+function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions, projectLabelIds, ignoreMembers) {
     const deps = [];
     const ret = [];
     const memberSet = new Set();
@@ -129,7 +129,10 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions, project
     // SET_ESTIMATE_TO_ASSIGNEES
     const staticEstimate = nameEstimate || subtasksEstimate;
     if (staticEstimate) {
-        if (card.idMembers.length === 0) {
+        const idMembers = card.idMembers
+            .filter(id => !ignoreMembers.includes(id));
+
+        if (idMembers.length === 0) {
             // assign to "Planning" member
             const task = factoryAssignment(
                 card,
@@ -145,9 +148,9 @@ function resolveCardTasks (card, shortLinks, taskMap, memberWorkOptions, project
             taskMap.set(card.id, task);
             ret.push(task);
         } else {
-            const splitEstimate = staticEstimate / card.idMembers.length;
-            const splitSpend = subtasksSpent / card.idMembers.length;
-            for (const idMember of card.idMembers) {
+            const splitEstimate = staticEstimate / idMembers.length;
+            const splitSpend = subtasksSpent / idMembers.length;
+            for (const idMember of idMembers) {
                 if (typeof taskByMember[idMember] === 'undefined') {
                     // create assignment
                     const task = factoryAssignment(
@@ -288,7 +291,7 @@ function resolveTaskList (taskList, taskMap, membersMap, cardsById) {
 }
 
 module.exports = {
-    resolveToTasks (cards, lists, memberWorkOptions, cardsById, labelsById, projectLabelIds) {
+    resolveToTasks (cards, lists, memberWorkOptions, cardsById, labelsById, projectLabelIds, ignoreMembers)  {
         const listsOrder = lists.map(list => list.id);
         const ignoredLabelIds = [];
         for (const label of labelsById.values()) {
@@ -344,7 +347,8 @@ module.exports = {
                 shortLinks,
                 taskMap,
                 memberWorkOptions,
-                projectLabelIds || []);
+                projectLabelIds || [],
+                ignoreMembers || []);
 
             for (const task of tasks) {
                 let member = membersMap.get(task._groupByMember);

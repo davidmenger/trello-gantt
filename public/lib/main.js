@@ -22,6 +22,11 @@ const store = configureStore({
         appColors: ['green', 'yellow', 'ping', 'sky'],
         bugColors: ['red'],
         projectColors: ['blue', 'lime', 'black', 'orange'],
+        ignoreMembers: [
+            '52eba016a0a3bce401edc3c3',
+            '5b1a546694db7264598c5e90',
+            '5d07835a24feb056b373d40d'
+        ],
         memberWorkOptions: {}
     }
 });

@@ -42,7 +42,8 @@ module.exports = function (state, action) {
             state.options.memberWorkOptions,
             cardsById,
             labelsById,
-            appLabelIds
+            appLabelIds,
+            state.options.ignoreMembers
         );
 
         const membersById = action.data.members
