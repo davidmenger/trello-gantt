@@ -27,7 +27,14 @@ const store = configureStore({
             '5b1a546694db7264598c5e90',
             '5d07835a24feb056b373d40d'
         ],
-        memberWorkOptions: {}
+        memberWorkOptions: {
+            // pav
+            '53f8e07fa98c4e4c54e42258': {
+                hours: 6,
+                weekDays: 3, // two of four out
+                begin: 10
+            }
+        }
     }
 });
 
